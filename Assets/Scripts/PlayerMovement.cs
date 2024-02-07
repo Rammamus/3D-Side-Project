@@ -2,25 +2,33 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-//This is a script that moves the player in accordance to the direction it is facing - Adrian
 public class PlayerMovement : MonoBehaviour
 {
-    //All variable relative to the movement - Adrian
     [Header("Movement")]
     public float moveSpeed;
     public float groundDrag;
     public float jumpForce;
 
-    [Header("Jumping")]
-    public float maxFallSpeed;
+    [Header("Grounding")]
     public bool grounded;
     public float playerHeight;
     public LayerMask whatIsGround;
-    public float fallingGravity;
 
+
+    [Header("Jumping")]
+    public bool canJump;
+    public bool isJumping;
+
+    [Header("Falling")]
+    public float maxFallSpeed;
     public float gravityScale = 1.0f;
     public static float globalGravity = -9.81f;
+    public float fallingGravity;
+    public float hangTimeGravity;
+    public float hangTimeFallingThreshold;
+    public float hangTimeRisingThreshold;
 
+    [Header("Orientation")]
     public Transform orientation;
     float horizontalInput;
     float verticalInput;
@@ -35,6 +43,7 @@ public class PlayerMovement : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
         rb.useGravity = false;
+        gravityScale = 1;
     }
 
     private void FixedUpdate()
@@ -47,11 +56,12 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
+        GroundCheck();
         MyInput();
         Jump();
     }
 
-    //Checks the player's movement inputs - Adrian
+    #region Move Player
     private void MyInput()
     {
         horizontalInput = Input.GetAxisRaw("Horizontal");
@@ -64,18 +74,54 @@ public class PlayerMovement : MonoBehaviour
         rb.drag = groundDrag;
         rb.AddForce(moveDirection.normalized * moveSpeed * 10f, ForceMode.Force); //Adds force in the previously calculated movedirection - Adrian
     }
+    #endregion
 
+    #region Jump
     private void Jump()
     {
-        grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, whatIsGround);
-        if (Input.GetKeyDown(KeyCode.Space) && grounded)
+        if (Input.GetKeyDown(KeyCode.Space) && canJump)
         {
             rb.AddForce(transform.up * jumpForce * 10, ForceMode.Force);
+            isJumping = true;
         }
+
+        #region Gravity and falling
         if (rb.velocity.y < 0)
         {
-            gravityScale *= fallingGravity;
-            rb.velocity = new Vector3(rb.velocity.x, Mathf.Max(rb.velocity.y, -maxFallSpeed));
+            SetGravityScale(fallingGravity);
+            rb.velocity = new Vector3(rb.velocity.x, Mathf.Max(rb.velocity.y, -maxFallSpeed), rb.velocity.z);
+        }
+        else if (rb.velocity.y < hangTimeFallingThreshold && rb.velocity.y > hangTimeRisingThreshold && !grounded)
+        {
+            SetGravityScale(hangTimeGravity);
+        }
+        else if (grounded)
+        {
+            SetGravityScale(1);
+            isJumping = false;
+        }
+        #endregion
+    }
+    #endregion
+
+    #region General Methods
+    public void SetGravityScale(float scale)
+    {
+        gravityScale = scale;
+    }
+
+    public void GroundCheck()
+    {
+        grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, whatIsGround);
+
+        if (grounded)
+        {
+            canJump = true;
+        }
+        else
+        {
+            canJump = false;
         }
     }
+    #endregion
 }

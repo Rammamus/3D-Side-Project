@@ -574,11 +574,18 @@ MonoBehaviour:
   groundDrag: 5
   jumpForce: 80
   grounded: 0
-  playerHeight: 3
+  playerHeight: 1.6
   whatIsGround:
     serializedVersion: 2
     m_Bits: 1024
-  fallingGravity: 5
+  canJump: 0
+  isJumping: 0
+  maxFallSpeed: 100
+  gravityScale: 1
+  fallingGravity: 3
+  hangTimeGravity: 0.3
+  hangTimeFallingThreshold: 0.8
+  hangTimeRisingThreshold: 0.3
   orientation: {fileID: 310734834}
 --- !u!114 &1144744240
 MonoBehaviour:
