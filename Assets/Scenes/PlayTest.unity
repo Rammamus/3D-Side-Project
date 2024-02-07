@@ -352,7 +352,7 @@ GameObject:
   - component: {fileID: 802712349}
   - component: {fileID: 802712348}
   - component: {fileID: 802712347}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Ground
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -570,8 +570,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 934024014e6a63f48a4a8dd65fec3e5e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 20
-  groundDrag: 10
+  moveSpeed: 5
+  groundDrag: 5
+  jumpForce: 80
+  grounded: 0
+  playerHeight: 3
+  whatIsGround:
+    serializedVersion: 2
+    m_Bits: 1024
+  fallingGravity: 5
   orientation: {fileID: 310734834}
 --- !u!114 &1144744240
 MonoBehaviour:
@@ -585,7 +592,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54e6a0b36b960ca40975d4993228135f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sensitivity: 1000
+  sensitivity: 300
   orientation: {fileID: 310734834}
   camera: {fileID: 714338074}
 --- !u!54 &1144744241
@@ -613,7 +620,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 80
   m_CollisionDetection: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
