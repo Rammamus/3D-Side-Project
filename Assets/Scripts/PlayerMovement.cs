@@ -7,17 +7,22 @@ public class PlayerMovement : MonoBehaviour
     [Header("Movement")]
     public float moveSpeed;
     public float groundDrag;
-    public float jumpForce;
 
     [Header("Grounding")]
     public bool grounded;
     public float playerHeight;
     public LayerMask whatIsGround;
 
+    [Header("Dashing")]
+    public float dashForce;
+    public int dashes;
+    public float dashCooldown;
+    public float dashTimer;
 
     [Header("Jumping")]
     public bool canJump;
     public bool isJumping;
+    public float jumpForce;
 
     [Header("Falling")]
     public float maxFallSpeed;
@@ -30,20 +35,19 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Orientation")]
     public Transform orientation;
+    public new Camera camera;
     float horizontalInput;
     float verticalInput;
 
     Vector3 moveDirection;
     Rigidbody rb;
-
-    CustomGravity customGravity;
-
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
         rb.useGravity = false;
         gravityScale = 1;
+        dashes = 2;
     }
 
     private void FixedUpdate()
@@ -59,6 +63,21 @@ public class PlayerMovement : MonoBehaviour
         GroundCheck();
         MyInput();
         Jump();
+        if (Input.GetKeyDown(KeyCode.LeftShift) && dashes > 0)
+        {
+            Debug.Log("shift");
+            Dash();
+        }
+
+        if (dashes < 2)
+        {
+            dashTimer += Time.deltaTime;
+            if (dashTimer > dashCooldown)
+            {
+                dashes++;
+                dashTimer = 0;
+            }
+        }
     }
 
     #region Move Player
@@ -76,12 +95,18 @@ public class PlayerMovement : MonoBehaviour
     }
     #endregion
 
-    #region Jump
+    private void Dash()
+    {
+        rb.AddForce(camera.transform.forward * dashForce, ForceMode.Impulse);
+        dashes--;
+        Debug.Log("dash");
+    }
+
     private void Jump()
     {
         if (Input.GetKeyDown(KeyCode.Space) && canJump)
         {
-            rb.AddForce(transform.up * jumpForce * 10, ForceMode.Force);
+            rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
             isJumping = true;
         }
 
@@ -102,7 +127,6 @@ public class PlayerMovement : MonoBehaviour
         }
         #endregion
     }
-    #endregion
 
     #region General Methods
     public void SetGravityScale(float scale)
