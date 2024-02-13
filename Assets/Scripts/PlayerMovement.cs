@@ -5,9 +5,10 @@ using UnityEngine.UI;
 
 public class PlayerMovement : MonoBehaviour
 {
-    #region All Variables
-    [Header("Movement")]
+    #region Variables
+    [Header("Movement Speed")]
     public float moveSpeed;
+    public float wallRunSpeed;
     public float groundDrag;
 
     [Header("Ground And Wall Check")]
@@ -53,6 +54,7 @@ public class PlayerMovement : MonoBehaviour
     Vector3 moveDirection;
     Rigidbody rb;
     #endregion
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -86,16 +88,29 @@ public class PlayerMovement : MonoBehaviour
                 canWallRun = true;
             }
 
-            if(canWallRun){
-                if(wallToLeft){
-                    LeftWallRun();
-                }
-                else if(wallToRight){
-                    RightWallRun();
-                }
+            if (canWallRun)
+            {
+                WallRun();
             }
         }
-        else if (Input.GetKeyUp(KeyCode.Space) && isWallRunning){
+        else if (isWallRunning){
+            if (!wallToLeft && !wallToRight)
+            {
+                isWallRunning = false;
+            }
+            if (Input.GetKeyUp(KeyCode.Space))
+            {
+                if (wallToLeft)
+                {
+                    Jump();
+                    rb.AddForce(orientation.right * jumpForce * 3);
+                }
+                if (wallToRight)
+                {
+                    Jump();
+                    rb.AddForce(-orientation.right * jumpForce * 3);
+                }
+            }
             Debug.Log("<color=green>boing</color>");
             isWallRunning = false;
         }
@@ -165,7 +180,7 @@ public class PlayerMovement : MonoBehaviour
     {
         moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput; //Declares the players movedirection with the orientation (which way the camera is facing) and the players inputs - Adrian
         rb.drag = groundDrag;
-        rb.AddForce(moveDirection.normalized * moveSpeed * 10f, ForceMode.Force); //Adds force in the previously calculated movedirection - Adrian
+        rb.AddForce(moveDirection.normalized * moveSpeed * 0.1f, ForceMode.VelocityChange); //Adds force in the previously calculated movedirection - Adrian
     }
     #endregion
 
@@ -175,14 +190,22 @@ public class PlayerMovement : MonoBehaviour
         dashes--;
     }
 
-    private void LeftWallRun()
+    private void WallRun()
     {
         isWallRunning = true;
-        Debug.Log("<color=blue>left wallrun</color>");
-    }
-    private void RightWallRun(){
-        isWallRunning = true;
-        Debug.Log("<color=red>right wallrun</color>");
+        SetGravityScale(0.1f);
+
+        rb.AddForce(orientation.forward * wallRunSpeed * Time.deltaTime);
+
+        if (wallToRight)
+        {
+            rb.AddForce(orientation.right * wallRunSpeed * Time.deltaTime);
+        }
+        else if (wallToLeft)
+        {
+            rb.AddForce(-orientation.right * wallRunSpeed * Time.deltaTime);
+        }
+        //Debug.Log("<color=blue>left wallrun</color>");
     }
 
     private void Jump()
