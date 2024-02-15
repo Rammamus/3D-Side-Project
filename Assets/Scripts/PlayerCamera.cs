@@ -13,8 +13,13 @@ public class PlayerCamera : MonoBehaviour
     float xRotation;
     float yRotation;
 
+    [Header("Camera Effects")]
     float wallRunCameraTilt;
     public float maxWallRunCameraTilt;
+    public float minFov;
+    public float maxFov;
+    public float curFov;
+    public float fovChangeThreshold;
 
     PlayerMovement pm;
 
@@ -39,7 +44,20 @@ public class PlayerCamera : MonoBehaviour
 
         //rotate the camera and player orientation - Adrian
         camera.transform.rotation = Quaternion.Euler(xRotation, yRotation, wallRunCameraTilt);
+        curFov = Mathf.Clamp(curFov, minFov, maxFov);
+        camera.GetComponent<Camera>().fieldOfView = curFov;
         orientation.rotation = Quaternion.Euler(0, yRotation, 0);
+
+
+        if (pm.curSpeed > fovChangeThreshold && pm.isWallRunning && (curFov += pm.curSpeed / 200) < minFov)
+        {
+            curFov += pm.curSpeed / 200;
+        }
+
+        if (pm.curSpeed < fovChangeThreshold && (curFov -= pm.curSpeed / 200) > minFov)
+        {
+            curFov -= pm.curSpeed / 200;
+        }
 
 
         if (Mathf.Abs(wallRunCameraTilt) < maxWallRunCameraTilt && pm.isWallRunning && pm.wallToLeft)

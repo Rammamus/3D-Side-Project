@@ -1177,6 +1177,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 15
+  curSpeed: 0
   wallRunSpeed: 30
   groundDrag: 5
   grounded: 0
@@ -1228,6 +1229,10 @@ MonoBehaviour:
   orientation: {fileID: 310734834}
   camera: {fileID: 714338074}
   maxWallRunCameraTilt: 10
+  minFov: 60
+  maxFov: 70
+  curFov: 0
+  fovChangeThreshold: 30
 --- !u!54 &1144744241
 Rigidbody:
   m_ObjectHideFlags: 0

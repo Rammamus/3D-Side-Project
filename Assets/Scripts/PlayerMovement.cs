@@ -8,6 +8,7 @@ public class PlayerMovement : MonoBehaviour
     #region Variables
     [Header("Movement Speed")]
     public float moveSpeed;
+    public float curSpeed;
     public float wallRunSpeed;
     public float groundDrag;
 
@@ -54,6 +55,7 @@ public class PlayerMovement : MonoBehaviour
     Vector3 moveDirection;
     Rigidbody rb;
     PlayerCamera pCam;
+    Vector3 oldPosition;
     #endregion
 
     void Start()
@@ -70,6 +72,11 @@ public class PlayerMovement : MonoBehaviour
         //Makes the player actually fucking use gravity - Adrian
         Vector3 gravity = globalGravity * gravityScale * Vector3.up;
         rb.AddForce(gravity, ForceMode.Acceleration);
+
+        //calculate speed
+        curSpeed = Vector3.Distance(oldPosition, transform.position) * 100f;
+        oldPosition = transform.position;
+        Debug.Log(curSpeed);
     }
 
     private void Update()
@@ -112,15 +119,14 @@ public class PlayerMovement : MonoBehaviour
                     rb.AddForce(-orientation.right * jumpForce * 100);
                 }
             }
-            Debug.Log("<color=green>boing</color>");
             isWallRunning = false;
+            canDoubleJump = true;
         }
 
         if (Input.GetKeyDown(KeyCode.LeftShift) && dashes > 0)
         {
             Dash();
         }
-        
 
         #region Dash timer and cooldown + UI
         if (dashes == 2)
@@ -207,7 +213,6 @@ public class PlayerMovement : MonoBehaviour
         {
             rb.AddForce(-orientation.right * wallRunSpeed * 10 * Time.deltaTime);
         }
-        //Debug.Log("<color=blue>left wallrun</color>");
     }
 
     private void Jump()
