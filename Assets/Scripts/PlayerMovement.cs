@@ -88,7 +88,7 @@ public class PlayerMovement : MonoBehaviour
                 canWallRun = true;
             }
 
-            if (canWallRun)
+            if (canWallRun && (wallToLeft || wallToRight))
             {
                 WallRun();
             }
@@ -103,12 +103,12 @@ public class PlayerMovement : MonoBehaviour
                 if (wallToLeft)
                 {
                     Jump();
-                    rb.AddForce(orientation.right * jumpForce * 3);
+                    rb.AddForce(orientation.right * jumpForce * 100);
                 }
                 if (wallToRight)
                 {
                     Jump();
-                    rb.AddForce(-orientation.right * jumpForce * 3);
+                    rb.AddForce(-orientation.right * jumpForce * 100);
                 }
             }
             Debug.Log("<color=green>boing</color>");
@@ -193,17 +193,18 @@ public class PlayerMovement : MonoBehaviour
     private void WallRun()
     {
         isWallRunning = true;
-        SetGravityScale(0.1f);
 
-        rb.AddForce(orientation.forward * wallRunSpeed * Time.deltaTime);
+        rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
+        rb.AddForce(orientation.up * jumpForce * 5 * Time.deltaTime, ForceMode.Force);
+        rb.AddForce(orientation.forward * wallRunSpeed * 100 * Time.deltaTime);
 
         if (wallToRight)
         {
-            rb.AddForce(orientation.right * wallRunSpeed * Time.deltaTime);
+            rb.AddForce(orientation.right * wallRunSpeed * 10 * Time.deltaTime);
         }
         else if (wallToLeft)
         {
-            rb.AddForce(-orientation.right * wallRunSpeed * Time.deltaTime);
+            rb.AddForce(-orientation.right * wallRunSpeed * 10 * Time.deltaTime);
         }
         //Debug.Log("<color=blue>left wallrun</color>");
     }
