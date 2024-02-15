@@ -719,6 +719,7 @@ GameObject:
   - component: {fileID: 714338075}
   - component: {fileID: 714338077}
   - component: {fileID: 714338076}
+  - component: {fileID: 714338078}
   m_Layer: 0
   m_Name: Camera
   m_TagString: Untagged
@@ -800,6 +801,27 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
+--- !u!95 &714338078
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 714338074}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: d48a90b86c16681459f9522c1cf78f1a, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &802712346
 GameObject:
   m_ObjectHideFlags: 0
@@ -1205,6 +1227,7 @@ MonoBehaviour:
   sensitivity: 300
   orientation: {fileID: 310734834}
   camera: {fileID: 714338074}
+  maxWallRunCameraTilt: 10
 --- !u!54 &1144744241
 Rigidbody:
   m_ObjectHideFlags: 0

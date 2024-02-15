@@ -53,6 +53,7 @@ public class PlayerMovement : MonoBehaviour
 
     Vector3 moveDirection;
     Rigidbody rb;
+    PlayerCamera pCam;
     #endregion
 
     void Start()
