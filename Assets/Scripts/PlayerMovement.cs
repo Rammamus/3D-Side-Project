@@ -23,13 +23,18 @@ public class PlayerMovement : MonoBehaviour
     public LayerMask whatIsGround;
     public LayerMask whatIsWall;
 
-    [Header("Dashing")]
+    [Header("Dashing & Sliding")]
     public float dashForce;
     public int dashes;
     public float dashCooldown;
     public float dashTimer;
     public Slider sliderL, sliderR;
     public Image imageL, imageR;
+    public float slideForce;
+    public float slideMultiplier;
+    public bool canSlide;
+    public float slideCooldown;
+    public float slideTimer;
 
     [Header("Jumping")]
     public bool canJump;
@@ -128,7 +133,16 @@ public class PlayerMovement : MonoBehaviour
             Dash();
         }
 
-        #region Dash timer and cooldown + UI
+        /*if (Input.GetKey(KeyCode.LeftControl) && canSlide)
+        {
+            Slide();
+        }
+        else if (Input.GetKeyUp(KeyCode.LeftControl) && grounded)
+        {
+            slideMultiplier = 1;
+        }*/
+
+        #region Timers
         if (dashes == 2)
         {
             sliderL.value = sliderR.value = 1;
@@ -156,6 +170,15 @@ public class PlayerMovement : MonoBehaviour
                 dashTimer = 0;
             }
         }
+
+        /*if (slideTimer < slideCooldown)
+        {
+            slideTimer += Time.deltaTime;
+        }
+        else if (slideTimer > slideCooldown && grounded)
+        {
+            canSlide = true;
+        }*/
         #endregion
 
         #region Gravity and falling
@@ -196,6 +219,20 @@ public class PlayerMovement : MonoBehaviour
         rb.AddForce(camera.transform.forward * dashForce, ForceMode.Impulse);
         dashes--;
     }
+
+    /*private void Slide()
+    {
+        slideTimer = 0;
+        if (slideMultiplier > 0)
+        {
+            rb.AddForce(orientation.transform.forward * slideForce * slideMultiplier, ForceMode.Force);
+            slideMultiplier -= Time.deltaTime * 2;
+        }
+        else
+        {
+            canSlide = false;
+        }
+    }*/
 
     private void WallRun()
     {
@@ -259,6 +296,9 @@ public class PlayerMovement : MonoBehaviour
         else
         {
             canJump = false;
+            canSlide = false;
+            slideMultiplier = 1;
+            slideTimer = 0;
         }
 
         if (wallToLeft){
