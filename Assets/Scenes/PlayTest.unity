@@ -735,8 +735,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 714338074}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.62, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: 1.0025758e-11, w: 1}
+  m_LocalPosition: {x: 0.049999993, y: 0.62, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1177,6 +1177,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 934024014e6a63f48a4a8dd65fec3e5e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  coins: 
   moveSpeed: 15
   curSpeed: 0
   wallRunSpeed: 30
@@ -1273,11 +1274,16 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1144744234}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 702ee8a684672434492c422c21151403, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  attackRange: 0
+  camera: {fileID: 0}
+  sliceAble:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!1 &1164734290
 GameObject:
   m_ObjectHideFlags: 0

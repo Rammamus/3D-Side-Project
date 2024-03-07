@@ -48,7 +48,6 @@ public class PlayerCamera : MonoBehaviour
         camera.GetComponent<Camera>().fieldOfView = curFov;
         orientation.rotation = Quaternion.Euler(0, yRotation, 0);
 
-
         if (pm.curSpeed > fovChangeThreshold && pm.isWallRunning && (curFov += pm.curSpeed / 200) < minFov)
         {
             curFov += pm.curSpeed / 200;

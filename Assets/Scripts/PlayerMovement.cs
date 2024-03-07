@@ -5,6 +5,9 @@ using UnityEngine.UI;
 
 public class PlayerMovement : MonoBehaviour
 {
+    //list :)
+    public List<int> coins;
+
     #region Variables
     [Header("Movement Speed")]
     public float moveSpeed;
@@ -81,7 +84,6 @@ public class PlayerMovement : MonoBehaviour
         //calculate speed
         curSpeed = Vector3.Distance(oldPosition, transform.position) * 100f;
         oldPosition = transform.position;
-        Debug.Log(curSpeed);
     }
 
     private void Update()
